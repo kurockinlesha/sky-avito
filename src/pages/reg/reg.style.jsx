@@ -43,6 +43,9 @@ export const Email = styled.input`
         font-size: 18px;
         font-weight: 400;
     }
+    &:focus {
+        outline: none;
+    }
 `;
 
 export const Password = styled(Email)`
