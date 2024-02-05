@@ -2,16 +2,12 @@ import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
 
-// @font-face {
-//   font-family: 'Abhaya Libre ExtraBold', serif;
-//   font-family: 'StratosSkyeng', sans-serif;
-//   src: 
-//     url("../public/fonts/AbhayaLibre-ExtraBold.ttf") ,
-//     url("../public/fonts/StratosSkyeng.woff2") ,
-//     url("../public/fonts/StratosSkyeng.woff") , 
-// }
+@font-face {
+  font-family: 'Roboto', serif;
+}
 
 * {
+  font-family: Roboto;
   margin: 0;
   padding: 0;
   -webkit-box-sizing: border-box;
@@ -44,10 +40,13 @@ body {
   color: #ffffff;
   min-height: 100vh;
 	width: 100%;
-  background: #271A58;
   
 
 }
 
-
+input, textarea {
+  &:focus {
+    outline: none;
+}
+}
 `;
