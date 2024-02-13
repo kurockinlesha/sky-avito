@@ -1,23 +1,23 @@
-import * as S from './cardProduct.style';
+import * as S from './cardProduct.style'
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
-import { formatToDate } from "../../utilits/dateFormate";
+import { formatToDate } from '../../utilits/dateFormate'
 
-export const CardProduct = ({name, price, city, date, image, id}) => {
-
+export const CardProduct = ({ name, price, city, date, image, id }) => {
     const navigate = useNavigate()
 
-	return (
+    return (
         <S.Card>
-            <S.CardImage src={image} onClick={() => navigate(`/product/${id}`)}></S.CardImage>
+            <S.CardImage
+                src={image}
+                onClick={() => navigate(`/product/${id}`)}
+            ></S.CardImage>
             <S.CardName>{name}</S.CardName>
             <S.CardPrice>{price} ₽</S.CardPrice>
             <S.CardCity>{city}</S.CardCity>
             <S.CardDate>{formatToDate(date)}</S.CardDate>
         </S.Card>
-
     )
-	
 }
 CardProduct.propTypes = {
     name: PropTypes.string.isRequired,

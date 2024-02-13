@@ -1,22 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit';
-
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     products: [],
     user: [],
-  }
+}
 
 export const avitoSlice = createSlice({
-  name: 'products',
-  initialState,
-   
-  reducers: {
-    setProducts: (state, action) => {
-      state.products = action.payload;
+    name: 'products',
+    initialState,
+
+    reducers: {
+        setProducts: (state, action) => {
+            state.products = action.payload
+        },
     },
-  },
-});
+})
 
-export const { setProducts } = avitoSlice.actions;
+export const { setProducts } = avitoSlice.actions
 
-export default avitoSlice.reducer;
+export default avitoSlice.reducer

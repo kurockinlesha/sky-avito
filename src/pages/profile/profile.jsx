@@ -1,35 +1,39 @@
-import * as S from './profile.style';
-import React from 'react';
+import * as S from './profile.style'
+import React from 'react'
 const { useEffect, useState } = React
-import { useLocation } from 'react-router-dom';
-import { ProfileHeader } from "../../components/profileHeader/profileHeader";
-import {getMyAdverts, getMyData, updateUser, baseUrl, addAvatar} from '../../components/api/api';
+import { useLocation } from 'react-router-dom'
+import { ProfileHeader } from '../../components/profileHeader/profileHeader'
+import {
+    getMyAdverts,
+    getMyData,
+    updateUser,
+    baseUrl,
+    addAvatar,
+} from '../../components/api/api'
 import { AddAdvert } from '../../components/addAdvert/addAdvert'
-import { CardProduct } from "../../components/cardProduct/cardProduct";
+import { CardProduct } from '../../components/cardProduct/cardProduct'
 
 export const Profile = () => {
-    
-    const location = useLocation();
+    const location = useLocation()
 
-    const [activeButton, setActiveButton] = useState(false);
-    const [addModal, setAddModal] = useState(false);
-    const [user, setUser] = useState([]);
-    const [name, setName] = useState('');
-    const [surname, setSurname] = useState('');
-    const [city, setCity] = useState('');
-    const [phone, setPhone] = useState('');
+    const [activeButton, setActiveButton] = useState(false)
+    const [addModal, setAddModal] = useState(false)
+    const [user, setUser] = useState([])
+    const [name, setName] = useState('')
+    const [surname, setSurname] = useState('')
+    const [city, setCity] = useState('')
+    const [phone, setPhone] = useState('')
     const [productsHtml, setProductsHtml] = useState([])
-    const [avatar, setAvatar] = useState(null);
-
+    const [avatar, setAvatar] = useState(null)
 
     const handleUserData = () => {
         getMyData().then((data) => {
             setUser(data)
             setName(data.name || '')
-            setSurname(data.surname || '') 
+            setSurname(data.surname || '')
             setCity(data.city || '')
             setPhone(data.phone || '')
-        })   
+        })
     }
 
     const handleMyAdvert = () => {
@@ -40,22 +44,25 @@ export const Profile = () => {
 
     const getHtml = (products) => {
         let result = products.map((product) => (
-
-                <CardProduct 
-                key={product.id} 
-                id={product.id} 
-                name={product.title} 
-                price={product.price} 
-                city={product.user?.city} 
-                date={product.user?.sells_from} 
-                image={product.images?.length ? baseUrl + product.images[0].url : '/img/notImage.png'}
-                /> 
-        ))  
+            <CardProduct
+                key={product.id}
+                id={product.id}
+                name={product.title}
+                price={product.price}
+                city={product.user?.city}
+                date={product.user?.sells_from}
+                image={
+                    product.images?.length
+                        ? baseUrl + product.images[0].url
+                        : '/img/notImage.png'
+                }
+            />
+        ))
         setProductsHtml(result)
     }
 
     const handleUpdate = () => {
-        updateUser(name, surname, city, phone).then(() =>{
+        updateUser(name, surname, city, phone).then(() => {
             handleUserData()
             handleMyAdvert()
         })
@@ -64,79 +71,102 @@ export const Profile = () => {
 
     const handleAvatarChange = (e) => {
         if (e.target.files && e.target.files[0]) {
-          const newAvatar = e.target.files[0];
-          setAvatar(newAvatar)
+            const newAvatar = e.target.files[0]
+            setAvatar(newAvatar)
         }
     }
-    
+
     useEffect(() => {
         if (location.pathname === '/profile') {
-            handleMyAdvert();
-            handleUserData();
-            console.log("prof");
+            handleMyAdvert()
+            handleUserData()
         }
-    }, [location]);
+    }, [location])
 
     useEffect(() => {
         if (avatar) {
-            addAvatar(avatar).then((data) => {console.log(data)});
+            addAvatar(avatar).then(() => {
+                handleUserData()
+            })
         }
     }, [avatar])
 
     useEffect(() => {
-        if (name !== user.name || surname !== user.surname || city !== user.city || phone !== user.phone) {
+        if (
+            name !== user.name ||
+            surname !== user.surname ||
+            city !== user.city ||
+            phone !== user.phone
+        ) {
             setActiveButton(true)
         } else {
             setActiveButton(false)
         }
     }, [name, surname, city, phone])
 
-
-
-	return (
+    return (
         <S.Page>
-            <AddAdvert addModal={addModal} switchModal={setAddModal} handleMyAdvert={handleMyAdvert}/>
-            <ProfileHeader switchModal={setAddModal}/>
+            <AddAdvert
+                addModal={addModal}
+                switchModal={setAddModal}
+                handleMyAdvert={handleMyAdvert}
+            />
+            <ProfileHeader switchModal={setAddModal} />
             <S.ProfileWelcome>Здравствуйте, {user.name}!</S.ProfileWelcome>
             <S.SectionName>Настройки профиля</S.SectionName>
             <S.Profile>
                 <S.ProfilePhoto>
                     <S.Photo src={baseUrl + user.avatar}></S.Photo>
-                    <label>Заменить
+                    <label>
+                        Заменить
                         <S.ChangePhoto
-                            style={{ display: 'none' }}     
+                            style={{ display: 'none' }}
                             type="file"
                             onChange={handleAvatarChange}
                             accept="image/*"
-                        >
-                        </S.ChangePhoto>
+                        ></S.ChangePhoto>
                     </label>
                 </S.ProfilePhoto>
                 <S.ProfileData>
                     <S.InputBoxName>
                         <S.InputName>Имя</S.InputName>
-                        <S.Input type="text" value={name} onChange={e => setName(e.target.value)}></S.Input>
+                        <S.Input
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        ></S.Input>
                     </S.InputBoxName>
                     <S.InputBoxSurname>
                         <S.InputName>Фамилия</S.InputName>
-                        <S.Input type="text" value={surname} onChange={e => setSurname(e.target.value)}></S.Input>
+                        <S.Input
+                            type="text"
+                            value={surname}
+                            onChange={(e) => setSurname(e.target.value)}
+                        ></S.Input>
                     </S.InputBoxSurname>
                     <S.InputBoxCity>
                         <S.InputName>Город</S.InputName>
-                        <S.Input type="text" value={city} onChange={e => setCity(e.target.value)}></S.Input>
+                        <S.Input
+                            type="text"
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                        ></S.Input>
                     </S.InputBoxCity>
                     <S.InputBoxTel>
                         <S.InputName>Телефон</S.InputName>
-                        <S.Input type='tel' value={phone} onChange={e => setPhone(e.target.value)}></S.Input>
+                        <S.Input
+                            type="tel"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                        ></S.Input>
                     </S.InputBoxTel>
-                    <S.SaveButton $active={activeButton} onClick={handleUpdate}>Сохранить</S.SaveButton>
+                    <S.SaveButton $active={activeButton} onClick={handleUpdate}>
+                        Сохранить
+                    </S.SaveButton>
                 </S.ProfileData>
             </S.Profile>
             <S.SectionName>Мои товары</S.SectionName>
-            <S.CardsBox>
-                {productsHtml}
-            </S.CardsBox>
-       </S.Page>
+            <S.CardsBox>{productsHtml}</S.CardsBox>
+        </S.Page>
     )
-	
 }
