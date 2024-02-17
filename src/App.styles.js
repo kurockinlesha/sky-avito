@@ -2,12 +2,9 @@ import { createGlobalStyle } from 'styled-components'
 
 export const GlobalStyle = createGlobalStyle`
 
-@font-face {
-  font-family: 'Roboto', serif;
-}
 
 * {
-  font-family: Roboto;
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
   -webkit-box-sizing: border-box;

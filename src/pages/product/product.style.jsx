@@ -39,6 +39,7 @@ export const ProductInfo = styled.div`
 `
 
 export const ProductName = styled.h1`
+    font-family: 'Noto Sans', sans-serif;
     font-size: 32px;
     font-weight: 700;
     line-height: 45px;
@@ -60,9 +61,12 @@ export const ProductCity = styled(ProductDate)`
 
 export const ProductReviews = styled(ProductDate)`
     color: #009ee4;
+    cursor: pointer;
+    font-family: 'Noto Sans', sans-serif;
 `
 
 export const ProductPrice = styled.h2`
+    font-family: 'Noto Sans', sans-serif;
     font-size: 28px;
     font-weight: 700;
     line-height: 39px;
@@ -90,6 +94,7 @@ export const SellerInfo = styled.div`
 `
 
 export const SellerName = styled.div`
+    font-family: 'Noto Sans', sans-serif;
     font-size: 20px;
     font-weight: 600;
     line-height: 26px;
@@ -100,6 +105,7 @@ export const SellerName = styled.div`
 `
 
 export const DateSale = styled.div`
+    font-family: 'Noto Sans', sans-serif;
     font-size: 16px;
     font-weight: 400;
     line-height: 32px;

@@ -3,14 +3,9 @@ import PropTypes from 'prop-types'
 import React from 'react'
 const { useState, useEffect } = React
 import { useDispatch } from 'react-redux'
-import { getProducts } from '../api/api'
+import { getProducts } from '../../api/api'
 import { setProducts } from '../../store/slices/avito'
-import {
-    editAdvert,
-    addImage,
-    baseUrl,
-    deleteImage,
-} from '../../components/api/api'
+import { editAdvert, addImage, baseUrl, deleteImage } from '../../api/api'
 
 export const EditAdvert = ({ switchModal, editModal, dataAdvert }) => {
     const dispatch = useDispatch()
@@ -27,15 +22,16 @@ export const EditAdvert = ({ switchModal, editModal, dataAdvert }) => {
     useEffect(() => {
         name !== dataAdvert.title ||
         description !== dataAdvert.description ||
-        price !== dataAdvert.price ||
+        price != dataAdvert.price ||
         images.length !== 0 ||
         forDelete.length !== 0
             ? setActiveButton(true)
             : setActiveButton(false)
     }, [name, description, price, images, forDelete])
 
-    const handleAddAdvert = () => {
-        editAdvert(name, description, price, dataAdvert.id).then((data) => {
+    const handleAddAdvert = async () => {
+        const data = await editAdvert(name, description, price, dataAdvert.id)
+        if (data) {
             if (images.length > 0) {
                 for (let index = 0; index < images.length; index++) {
                     addImage(data.id, images[index]).then(() => {
@@ -54,9 +50,7 @@ export const EditAdvert = ({ switchModal, editModal, dataAdvert }) => {
                     dispatch(setProducts(data))
                 })
             }
-
-            console.log(data.id)
-        })
+        }
     }
 
     const handleImageChange = (e) => {
@@ -151,13 +145,25 @@ export const EditAdvert = ({ switchModal, editModal, dataAdvert }) => {
                 <S.InputName
                     value={name}
                     placeholder="Введите название"
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) =>
+                        setName(
+                            e.target.value
+                                .replaceAll('<', '&lt;')
+                                .replaceAll('>', '&gt;'),
+                        )
+                    }
                 ></S.InputName>
                 <S.NameSection>Описание</S.NameSection>
                 <S.InputDescription
                     value={description}
                     placeholder="Введите описание"
-                    onChange={(e) => setDescription(e.target.value)}
+                    onChange={(e) =>
+                        setDescription(
+                            e.target.value
+                                .replaceAll('<', '&lt;')
+                                .replaceAll('>', '&gt;'),
+                        )
+                    }
                 ></S.InputDescription>
                 <S.NameSection>
                     Фотографии товара <span>не более 5 фотографий</span>
@@ -168,7 +174,13 @@ export const EditAdvert = ({ switchModal, editModal, dataAdvert }) => {
                     <S.InputPrice
                         type="number"
                         value={price}
-                        onChange={(e) => setPrice(e.target.value)}
+                        onChange={(e) =>
+                            setPrice(
+                                e.target.value
+                                    .replaceAll('<', '&lt;')
+                                    .replaceAll('>', '&gt;'),
+                            )
+                        }
                     ></S.InputPrice>
                 </S.BoxInput>
                 <S.ButtonModal

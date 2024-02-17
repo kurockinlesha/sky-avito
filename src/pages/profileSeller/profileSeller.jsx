@@ -7,7 +7,7 @@ import { CardProduct } from '../../components/cardProduct/cardProduct'
 import { ProfileHeader } from '../../components/profileHeader/profileHeader'
 import { ShowTelButton } from '../../components/showTelButton/showTelButton'
 import { AddAdvert } from '../../components/addAdvert/addAdvert'
-import { baseUrl } from '../../components/api/api'
+import { baseUrl } from '../../api/api'
 import { formatToDate } from '../../utilits/dateFormate'
 
 export const ProfileSeller = () => {
@@ -70,7 +70,7 @@ export const ProfileSeller = () => {
                             <ShowTelButton phone={user.phone} />
                         </S.ProfileData>
                     </S.Seller>
-                    <S.SectionName>Мои товары</S.SectionName>
+                    <S.SectionName>Товары продавца</S.SectionName>
                     <S.CardsBox>{productsHtml}</S.CardsBox>
                 </>
             )}

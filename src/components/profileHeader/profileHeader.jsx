@@ -17,7 +17,7 @@ export const ProfileHeader = ({ switchModal }) => {
             </S.Header>
             <S.ProfileNav>
                 <S.LogoProfile src="/img/LogoMain.svg"></S.LogoProfile>
-                <S.ButtonBack onClick={() => navigate(`/Main`)}>
+                <S.ButtonBack onClick={() => navigate(`/`)}>
                     Вернуться на главную
                 </S.ButtonBack>
             </S.ProfileNav>

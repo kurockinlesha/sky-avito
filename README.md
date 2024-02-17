@@ -19,6 +19,7 @@
 - HTML;
 - JavaScript;
 - React;
+- React-redux;
 - StyledComponents.
 
 Запуск проекта

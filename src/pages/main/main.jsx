@@ -3,7 +3,7 @@ import React from 'react'
 const { useState, useEffect } = React
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { baseUrl } from '../../components/api/api'
+import { baseUrl } from '../../api/api'
 import { CardProduct } from '../../components/cardProduct/cardProduct'
 
 export const Main = () => {
@@ -46,14 +46,24 @@ export const Main = () => {
     return (
         <>
             <S.Header>
-                <S.ButtonHeader onClick={() => navigate(`/profile`)}>
+                <S.ButtonHeader
+                    onClick={() => {
+                        navigate(`/profile`)
+                    }}
+                >
                     Вход в личный кабинет
                 </S.ButtonHeader>
             </S.Header>
             <S.SearchMain>
                 <S.LogMain src="/img/LogoMain.svg"></S.LogMain>
                 <S.Search
-                    onChange={(e) => setSearchText(e.target.value)}
+                    onChange={(e) =>
+                        setSearchText(
+                            e.target.value
+                                .replaceAll('<', '&lt;')
+                                .replaceAll('>', '&gt;'),
+                        )
+                    }
                     placeholder="Поиск по объявлениям"
                 ></S.Search>
                 <S.SearchHeader onClick={() => search(searchText)}>

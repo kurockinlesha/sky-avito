@@ -108,11 +108,15 @@ export const SaveButton = styled.button`
     width: 154px;
     height: 50px;
     border-radius: 6px;
-    background: ${({ $active }) => ($active ? '#009EE4' : '#D9D9D9')};
+    background: #009ee4;
     border: none;
     margin-top: 10px;
     font-size: 16px;
     font-weight: 400;
     line-height: 24px;
     color: white;
+    &:disabled {
+        background: #d9d9d9;
+        cursor: default;
+    }
 `

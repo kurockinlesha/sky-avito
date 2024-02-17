@@ -15,7 +15,7 @@ export const ShowTelButton = ({ phone }) => {
             ) : (
                 <>
                     <S.TittleButton>Показать телефон </S.TittleButton>
-                    <S.TelButton>8 905 ХХХ ХХ ХХ</S.TelButton>
+                    <S.TelButton>+7 XXX ХХХ ХХ ХХ</S.TelButton>
                 </>
             )}
         </S.SellerButton>

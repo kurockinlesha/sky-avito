@@ -1,6 +1,6 @@
 import { formatDistanceToNow } from 'date-fns'
 import { ru } from 'date-fns/locale'
-const _ = require('lodash')
+import _ from 'lodash'
 
 export function formatToDate(dateString) {
     const date = new Date(dateString)
@@ -28,5 +28,27 @@ export function formatDate(dateString) {
     const month = monthNames[date.getMonth()]
     const year = date.getFullYear()
     const resultString = 'Продает товары с ' + month + ' ' + year
+    return resultString
+}
+
+export function formatReviewsDate(dateString) {
+    const date = new Date(dateString)
+    const monthNames = [
+        'января',
+        'февраля',
+        'марта',
+        'апреля',
+        'мая',
+        'июня',
+        'июля',
+        'августа',
+        'сентября',
+        'октября',
+        'ноября',
+        'декабря',
+    ]
+    const day = date.getDate()
+    const month = monthNames[date.getMonth()]
+    const resultString = day + ' ' + month
     return resultString
 }

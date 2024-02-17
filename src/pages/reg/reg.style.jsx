@@ -8,6 +8,11 @@ export const Page = styled.div`
     padding-top: calc(50vh - 323px);
     background: rgba(209, 216, 222, 1);
 `
+export const Error = styled.div`
+    height: 10px;
+    color: red;
+    margin-top: 5px;
+`
 
 export const Container = styled.div`
     height: 647px;

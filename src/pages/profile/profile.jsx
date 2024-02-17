@@ -9,7 +9,7 @@ import {
     updateUser,
     baseUrl,
     addAvatar,
-} from '../../components/api/api'
+} from '../../api/api'
 import { AddAdvert } from '../../components/addAdvert/addAdvert'
 import { CardProduct } from '../../components/cardProduct/cardProduct'
 
@@ -61,12 +61,13 @@ export const Profile = () => {
         setProductsHtml(result)
     }
 
-    const handleUpdate = () => {
-        updateUser(name, surname, city, phone).then(() => {
+    const handleUpdate = async () => {
+        const data = await updateUser(name, surname, city, phone)
+        if (data) {
             handleUserData()
             handleMyAdvert()
-        })
-        setActiveButton(false)
+            setActiveButton(true)
+        }
     }
 
     const handleAvatarChange = (e) => {
@@ -98,9 +99,9 @@ export const Profile = () => {
             city !== user.city ||
             phone !== user.phone
         ) {
-            setActiveButton(true)
-        } else {
             setActiveButton(false)
+        } else {
+            setActiveButton(true)
         }
     }, [name, surname, city, phone])
 
@@ -116,7 +117,13 @@ export const Profile = () => {
             <S.SectionName>Настройки профиля</S.SectionName>
             <S.Profile>
                 <S.ProfilePhoto>
-                    <S.Photo src={baseUrl + user.avatar}></S.Photo>
+                    <S.Photo
+                        src={
+                            user.avatar
+                                ? baseUrl + user.avatar
+                                : '/img/notImage.png'
+                        }
+                    ></S.Photo>
                     <label>
                         Заменить
                         <S.ChangePhoto
@@ -133,7 +140,13 @@ export const Profile = () => {
                         <S.Input
                             type="text"
                             value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            onChange={(e) =>
+                                setName(
+                                    e.target.value
+                                        .replaceAll('<', '&lt;')
+                                        .replaceAll('>', '&gt;'),
+                                )
+                            }
                         ></S.Input>
                     </S.InputBoxName>
                     <S.InputBoxSurname>
@@ -141,7 +154,13 @@ export const Profile = () => {
                         <S.Input
                             type="text"
                             value={surname}
-                            onChange={(e) => setSurname(e.target.value)}
+                            onChange={(e) =>
+                                setSurname(
+                                    e.target.value
+                                        .replaceAll('<', '&lt;')
+                                        .replaceAll('>', '&gt;'),
+                                )
+                            }
                         ></S.Input>
                     </S.InputBoxSurname>
                     <S.InputBoxCity>
@@ -149,7 +168,13 @@ export const Profile = () => {
                         <S.Input
                             type="text"
                             value={city}
-                            onChange={(e) => setCity(e.target.value)}
+                            onChange={(e) =>
+                                setCity(
+                                    e.target.value
+                                        .replaceAll('<', '&lt;')
+                                        .replaceAll('>', '&gt;'),
+                                )
+                            }
                         ></S.Input>
                     </S.InputBoxCity>
                     <S.InputBoxTel>
@@ -157,10 +182,19 @@ export const Profile = () => {
                         <S.Input
                             type="tel"
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={(e) =>
+                                setPhone(
+                                    e.target.value
+                                        .replaceAll('<', '&lt;')
+                                        .replaceAll('>', '&gt;'),
+                                )
+                            }
                         ></S.Input>
                     </S.InputBoxTel>
-                    <S.SaveButton $active={activeButton} onClick={handleUpdate}>
+                    <S.SaveButton
+                        onClick={handleUpdate}
+                        disabled={activeButton}
+                    >
                         Сохранить
                     </S.SaveButton>
                 </S.ProfileData>
