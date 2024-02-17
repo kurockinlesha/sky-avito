@@ -19,7 +19,7 @@ export const Auth = () => {
             getMyData().then((data) => {
                 console.log(data)
                 localStorage.setItem('userId', data.id)
-                navigate(`/`)
+                navigate(`/main`)
             })
         })
     }

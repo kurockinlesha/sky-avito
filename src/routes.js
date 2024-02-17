@@ -23,8 +23,8 @@ export const AppRoutes = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/" element={<Main />} />
+                <Route path="/" element={<Auth />} />
+                <Route path="/Main" element={<Main />} />
                 <Route path="/reg" element={<Reg />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/profileSeller/:id" element={<ProfileSeller />} />
