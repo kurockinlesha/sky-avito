@@ -1,39 +1,41 @@
-import React from 'react'
-const { useEffect } = React
-import { Routes, Route, BrowserRouter } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { getProducts } from './api/api'
-import { setProducts } from './store/slices/avito'
-import { Auth } from './pages/auth/auth'
-import { Main } from './pages/main/main'
-import { Reg } from './pages/reg/reg'
-import { Profile } from './pages/profile/profile'
-import { ProfileSeller } from './pages/profileSeller/profileSeller'
-import { Product } from './pages/product/product'
-import { ProtectedRoute } from './components/protectedRoute/protectedRoute'
+import { Route, Routes } from "react-router-dom";
+import { MainPage } from "./pages/main/main";
+import { ProtectedRoute } from "./protector-router";
+import { Login } from "./pages/auth/login";
+import { Registration } from "./pages/auth/registration";
+import { NotFound } from "./pages/not-found/notFound";
+import { Article } from "./pages/article/article";
+import { Profile } from "./pages/profile/profile";
 
-export const AppRoutes = () => {
-    const dispatch = useDispatch()
+export const AppRoutes = ({ ads, isLoading, setAds }) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/registration" element={<Registration />} />
+      <Route
+        path="/"
+        element={<MainPage ads={ads} isLoading={isLoading} setAds={setAds} />}
+      />
+      <Route
+        path="/profile/:id"
+        element={
+          <Profile
+            ads={ads}
+            setAds={setAds}
+            isLoading={isLoading}
+            user={null}
+          />
+        }
+      />
+      <Route path="/ads/:id" element={<Article ads={ads} setAds={setAds} />} />
+      <Route
+        element={<ProtectedRoute isAllowed={Boolean(token?.access_token)} />}
+      >
+        <Route path="/ads/me" element={<Article ads={ads} setAds={setAds} />} />
+      </Route>
 
-    useEffect(() => {
-        getProducts().then((data) => {
-            dispatch(setProducts(data))
-        })
-    }, [])
-
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/" element={<Main />} />
-                <Route path="/reg" element={<Reg />} />
-                <Route path="/profileSeller/:id" element={<ProfileSeller />} />
-                <Route path="/product/:id" element={<Product />} />
-
-                <Route element={<ProtectedRoute />}>
-                    <Route path="/profile" element={<Profile />} />
-                </Route>
-            </Routes>
-        </BrowserRouter>
-    )
-}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};

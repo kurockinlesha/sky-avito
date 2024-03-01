@@ -1,77 +1,104 @@
-import * as S from './main.style'
-import React from 'react'
-const { useState, useEffect } = React
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { baseUrl } from '../../api/api'
-import { CardProduct } from '../../components/cardProduct/cardProduct'
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Footer } from "../../components/footer/footer";
+import { MainHeader } from "../../components/header/header";
+import img from "../../img/logo.png";
+import imgMob from "../../img/logo-mob.png";
+import * as S from "./main.style";
+import noPhoto from "../../img/no-photo.png";
+import { apiHost } from "../../api/constants";
 
-export const Main = () => {
-    const productsState = useSelector((state) => state.products.products)
-    const navigate = useNavigate()
-    const [searchText, setSearchText] = useState('')
-    const [productsHtml, setProductsHtml] = useState([])
+export const MainPage = ({ ads, setAds, isLoading }) => {
+  const [searchType, setSearchType] = useState("");
 
-    useEffect(() => {
-        getHtml(productsState)
-    }, [productsState])
-
-    const getHtml = (products) => {
-        let result = products.map((product) => (
-            <CardProduct
-                key={product.id}
-                id={product.id}
-                name={product.title}
-                price={product.price}
-                city={product.user?.city}
-                date={product.user?.sells_from}
-                image={
-                    product.images?.length
-                        ? baseUrl + product.images[0].url
-                        : '/img/notImage.png'
-                }
-            />
-        ))
-        setProductsHtml(result)
+  const filteredAds = () => {
+    let filterAds = ads;
+    if (searchType?.length > 0) {
+      filterAds = filterAds.filter(({ title }) =>
+        title.toLocaleLowerCase().includes(searchType.toLocaleLowerCase())
+      );
     }
+    return filterAds;
+  };
 
-    const search = (text) => {
-        let filter = productsState.filter((product) =>
-            product.title.toLowerCase().includes(text.toLowerCase()),
-        )
-        getHtml(filter)
-        console.log(filter)
-    }
+  const filterAd = filteredAds();
 
-    return (
-        <>
-            <S.Header>
-                <S.ButtonHeader
-                    onClick={() => {
-                        navigate(`/profile`)
-                    }}
-                >
-                    Вход в личный кабинет
-                </S.ButtonHeader>
-            </S.Header>
-            <S.SearchMain>
-                <S.LogMain src="/img/LogoMain.svg"></S.LogMain>
-                <S.Search
-                    onChange={(e) =>
-                        setSearchText(
-                            e.target.value
-                                .replaceAll('<', '&lt;')
-                                .replaceAll('>', '&gt;'),
-                        )
-                    }
-                    placeholder="Поиск по объявлениям"
-                ></S.Search>
-                <S.SearchHeader onClick={() => search(searchText)}>
-                    Найти
-                </S.SearchHeader>
-            </S.SearchMain>
-            <S.TitleMain>Объявления</S.TitleMain>
-            <S.CardsBox>{productsHtml}</S.CardsBox>
-        </>
-    )
-}
+  return (
+    <>
+      <MainHeader ads={ads} setAds={setAds} />
+      <S.MainSearch>
+        <S.SearchLogoLink href="#" target="_blank">
+          <Link to="/">
+            <S.SearchLogoImg src={img} alt="logo" />
+          </Link>
+        </S.SearchLogoLink>
+        <S.SearchLogoMobLink href="#" target="_blank">
+          <Link to="/">
+            <S.SearchLogoMobImg src={imgMob} alt="logo" />
+          </Link>
+        </S.SearchLogoMobLink>
+        <S.SearchForm action="#">
+          <S.SearchText
+            type="search"
+            placeholder="Поиск по объявлениям"
+            name="search"
+            value={searchType}
+            onChange={(e) => setSearchType(e.target.value)}
+          />
+          <S.SearchTextMob
+            type="search"
+            placeholder="Поиск"
+            name="search-mob"
+            value={searchType}
+            onChange={(e) => setSearchType(e.target.value)}
+          />
+          <S.SearchBtn onClick={() => filterAd}>Найти</S.SearchBtn>
+        </S.SearchForm>
+      </S.MainSearch>
+      <S.MainContainer>
+        <S.CardTitle>Объявления</S.CardTitle>
+        <S.MainContent>
+          <S.ContentCards>
+            {isLoading ? (
+              <S.MainH2>Объявления загружаются...</S.MainH2>
+            ) : filterAd?.length > 0 ? (
+              filterAd.map((ad, item) => (
+                <S.CardsItem key={item}>
+                  <S.CardsCard>
+                    <S.CardImage key={ad.images}>
+                      <Link to={`/ads/${ad.id}`}>
+                        {ad.images.length !== 0 ? (
+                          <S.Img
+                            src={`${apiHost}/${ad.images[0]?.url}`}
+                            alt="picture"
+                          />
+                        ) : (
+                          <S.Img src={noPhoto} alt="noPhoto" />
+                        )}
+                      </Link>
+                    </S.CardImage>
+                    <S.CardContent>
+                      <Link to={`/ads/${ad.id}`}>
+                        <S.CardTitle>{ad.title}</S.CardTitle>
+                      </Link>
+                      <S.CardPrice>{ad.price} ₽</S.CardPrice>
+                      <S.CardPlace>{ad.user.city}</S.CardPlace>
+                      <S.CardDate>
+                        {new Date(ad.created_on).toLocaleString("ru", {
+                          addSuffix: true,
+                        })}
+                      </S.CardDate>
+                    </S.CardContent>
+                  </S.CardsCard>
+                </S.CardsItem>
+              ))
+            ) : (
+              <S.CardTitle>Ничего не найдено</S.CardTitle>
+            )}
+          </S.ContentCards>
+        </S.MainContent>
+      </S.MainContainer>
+      <Footer />
+    </>
+  );
+};
